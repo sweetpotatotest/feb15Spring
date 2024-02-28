@@ -63,23 +63,34 @@
         		let email = $('#email').val();
         		//Swal.fire('회원가입', id + pw1 + pw2 + name + email, 'success');
         		//각각 빈칸검사
-        		if (id.length < 3) {
+        		if (id.length < 3 || id.length >10) {
 					Swal.fire('아이디오류', '3글자 이상 입력해주세요', 'error');
-				}
+        		} else if(pw1 != pw2) {
+					Swal.fire('비밀번호오류', '비밀번호가 같지 않습니다', 'error');
+				} else if (pw1 <3 || pw2 <3) {
+					Swal.fire('비밀번호오류', '3글자 이상 입력해주세요', 'error');
+				} else if (email.indexOf('@') == -1) {
+					Swal.fire('이메일오류', '@를 포함해 정확히 입력해주세요', 'error');
+				} else if(name.length < 1){
+					Swal.fire('이름오류', '이름을 입력해주세요', 'error');
+				}	
+					//전송하기
+	        		let loginForm = $('<form></form>');
+	        		loginForm.attr('name', 'login');
+	        		loginForm.attr('method', 'post');
+	        		loginForm.attr('action', './join');
+	        		
+	        		loginForm.append( $('<input>', {'type':'hidden', 'name':'id', 'value':id}) );
+	        		loginForm.append( $('<input>', {type:'hidden', 'name':'pw', 'value':pw1}) );
+	        		loginForm.append( $('<input>', {type:'hidden', 'name':'name', 'value':name}) );
+	        		loginForm.append( $('<input>', {type:'hidden', 'name':'email', 'value':email}) );
+	        		
+	        		loginForm.appendTo('body');
+	        		loginForm.submit();	
+				}       		
         		
-        		//전송하기
-        		let loginForm = $('<form></form>');
-        		loginForm.attr('name', 'login');
-        		loginForm.attr('method', 'post');
-        		loginForm.attr('action', './join');
+					 
         		
-        		loginForm.append( $('<input>', {'type':'hidden', 'name':'id', 'value':id}) );
-        		loginForm.append( $('<input>', {type:'hidden', 'name':'pw', 'value':pw1}) );
-        		loginForm.append( $('<input>', {type:'hidden', 'name':'name', 'value':name}) );
-        		loginForm.append( $('<input>', {type:'hidden', 'name':'email', 'value':email}) );
-        		
-        		loginForm.appendTo('body');
-        		loginForm.submit();
         	});
         });
         
@@ -99,7 +110,7 @@
 			<div class="mb-3 row">
 				<label for="id" class="col-sm-2 col-form-label">아이디</label>
 				<div class="col-sm-7">
-					<input type="text" id="id" class="form-control" placeholder="아이디를 입력하세요">
+					<input type="text" id="id" class="form-control" placeholder="아이디를 입력하세요" required>
 				</div>
 				<div class="col-sm-3">
 					<button type="button" id="idCheck" class="btn btn-info w-100">ID 검사</button>
@@ -108,22 +119,22 @@
 			<div class="mb-3 row">
 				<label for="inputPassword" class="col-sm-2 col-form-label">비밀번호</label>
 				<div class="col-sm-5">
-					<input type="password" class="form-control" id="password1" placeholder="암호를 입력하세요">
+					<input type="password" class="form-control" id="password1" placeholder="암호를 입력하세요" required>
 				</div>
 				<div class="col-sm-5">
-					<input type="password" class="form-control" id="password2" placeholder="암호를 입력하세요">
+					<input type="password" class="form-control" id="password2" placeholder="암호를 입력하세요" required>
 				</div>
 			</div>
 			<div class="mb-3 row">
 				<label for="name" class="col-sm-2 col-form-label">이 름</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="name" placeholder="이름을 입력하세요">
+					<input type="text" class="form-control" id="name" placeholder="이름을 입력하세요" required>
 				</div>
 			</div>
 			<div class="mb-3 row">
 				<label for="email" class="col-sm-2 col-form-label">이메일</label>
 				<div class="col-sm-10">
-					<input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요">
+					<input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요" required>
 				</div>
 			</div>
 			<div class="mb-3 row">
