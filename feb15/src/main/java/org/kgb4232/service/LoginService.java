@@ -2,6 +2,7 @@ package org.kgb4232.service;
 
 import org.kgb4232.dao.LoginDAO;
 import org.kgb4232.dto.LoginDTO;
+import org.kgb4232.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,10 @@ public class LoginService {
 
 	public void mcountReset(LoginDTO loginDTO) {
 		loginDAO.mcountReset(loginDTO);
+	}
+
+	public int join(MemberDTO join) {
+		return loginDAO.join(join);
 	}
 
 	

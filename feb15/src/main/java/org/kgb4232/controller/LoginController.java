@@ -106,7 +106,27 @@ public class LoginController {
 	//비밀번호1
 	//비밀번호2
 	//이메일 -> 중복불가
-	//닉네이
+	//닉네임
+		
+	@PostMapping("/join")
+	public String join(HttpServletRequest request) {
+		System.out.println(request.getParameter("id"));
+		System.out.println(request.getParameter("pw"));
+		System.out.println(request.getParameter("name"));
+		System.out.println(request.getParameter("email"));
+		
+		MemberDTO join = new MemberDTO();
+		join.setMid(request.getParameter("id"));
+		join.setMpw(request.getParameter("pw"));
+		join.setMname(request.getParameter("name"));
+		join.setMemail(request.getParameter("email"));
+		
+		int result = loginservice.join(join);
+		System.out.println("회원가입 결과   " + result);
+		
+		return "redirect:/login";
+	}
+	
 	
 }
 

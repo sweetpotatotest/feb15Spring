@@ -27,4 +27,10 @@
 	<update id="setKey" parameterType="memberDTO">
 		UPDATE member SET mkey=#{mkey} WHERE mid=#{mid}
 	</update>
+	
+	<insert id="join" parameterType="memberDTO">
+		INSERT INTO member (mid, mpw, mname, memail)
+		VALUES (#{mid}, #{mpw}, #{mname}, #{memail})
+	</insert>
+	
 </mapper>

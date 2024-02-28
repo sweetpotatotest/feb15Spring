@@ -66,6 +66,20 @@
         		if (id.length < 3) {
 					Swal.fire('아이디오류', '3글자 이상 입력해주세요', 'error');
 				}
+        		
+        		//전송하기
+        		let loginForm = $('<form></form>');
+        		loginForm.attr('name', 'login');
+        		loginForm.attr('method', 'post');
+        		loginForm.attr('action', './join');
+        		
+        		loginForm.append( $('<input>', {'type':'hidden', 'name':'id', 'value':id}) );
+        		loginForm.append( $('<input>', {type:'hidden', 'name':'pw', 'value':pw1}) );
+        		loginForm.append( $('<input>', {type:'hidden', 'name':'name', 'value':name}) );
+        		loginForm.append( $('<input>', {type:'hidden', 'name':'email', 'value':email}) );
+        		
+        		loginForm.appendTo('body');
+        		loginForm.submit();
         	});
         });
         

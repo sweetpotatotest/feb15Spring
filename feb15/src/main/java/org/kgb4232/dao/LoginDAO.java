@@ -24,4 +24,8 @@ public class LoginDAO extends AbstractDAO{
 	public void setKey(MemberDTO dto) {
 		sqlSession.update("login.setKey", dto);
 	}
+
+	public int join(MemberDTO join) {
+		return sqlSession.insert("login.join", join);
+	}
 }
