@@ -52,6 +52,45 @@
         
         $(function(){
         	//Swal.fire('title', 'content', 'success');
+        	//24-02-29 애플리케이션 테스트 수행
+        	$('#idCheck').click(function (){
+        		let id = $('#id').val();
+        		//Swal.fire('검사', '검사할아이디'+id, 'success');
+        		//3글자 이상, 10글자 이하
+        		if (id.length < 3 || id.length >10) {
+        			Swal.fire('아이디오류', '아이디는 3 ~ 10 글자로 입력해주세요', 'error');
+        			$('#id').focus();
+        			return false;
+				} else {
+					//id전송하기 -> ajax
+					$.ajax({
+						url : './idCheck',
+						type : 'post',
+						dataType : 'json',
+						data : {id : id},
+						success : function(data){
+							alert(data.count);
+							if (data.count == 1) {
+								Swal.fire('ID검사', '이미 가입된 ID입니다. 다른 아이디를 입력하세요.', 'warning');
+							} else {
+								Swal.fire('ID검사', id + '는 가입할 수 있는 아이디입니다.', 'success');
+								//나머지 작업
+							}
+							
+						},
+						error : function(error){
+							Swal.fire('아이디오류', '문제가 발생했습니다' + error, 'error');
+							$('#id').focus();
+						}
+					});
+					
+				}
+        	});
+        	
+        	
+        	
+        	
+        	
         	//join을 클릭하면 이벤트 발생
         	$('#join').click(function(){
         		//Swal.fire('회원가입', '회원가입 버튼을 클릭하셨습니다.', 'success');
@@ -69,11 +108,11 @@
 					Swal.fire('비밀번호오류', '비밀번호가 같지 않습니다', 'error');
 				} else if (pw1 <3 || pw2 <3) {
 					Swal.fire('비밀번호오류', '3글자 이상 입력해주세요', 'error');
-				} else if (email.indexOf('@') == -1) {
-					Swal.fire('이메일오류', '@를 포함해 정확히 입력해주세요', 'error');
-				} else if(name.length < 1){
+				} else if (name.length < 1) {
 					Swal.fire('이름오류', '이름을 입력해주세요', 'error');
-				}	
+				} else if(email.indexOf('@') == -1){
+					Swal.fire('이메일오류', '@를 포함해 정확히 입력해주세요', 'error');
+				} else {
 					//전송하기
 	        		let loginForm = $('<form></form>');
 	        		loginForm.attr('name', 'login');
@@ -87,7 +126,9 @@
 	        		
 	        		loginForm.appendTo('body');
 	        		loginForm.submit();	
-				}       		
+				}	
+					
+				      		
         		
 					 
         		

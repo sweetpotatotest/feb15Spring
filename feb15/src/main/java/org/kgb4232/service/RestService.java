@@ -32,6 +32,9 @@ public class RestService extends AbstractService{
 	public String getEmail(String email) {
 		return restDAO.getEmail(email);
 	}
+	public int idCheck(String id) {
+		return restDAO.idCheck(id);
+	}
 	
 	
 }

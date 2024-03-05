@@ -1,11 +1,11 @@
 package org.kgb4232.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.kgb4232.dao.BoardDAO;
 import org.kgb4232.dto.BoardDTO;
 import org.kgb4232.dto.CommentDTO;
+import org.kgb4232.dto.SearchDTO;
 import org.kgb4232.dto.WriteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,8 @@ public class BoardService extends AbstractService{
 	private BoardDAO boardDAO;
 	
 	
-	public List<Map<String, Object>> boardList(int pageNo){
-		return boardDAO.boardList(pageNo);
+	public List<BoardDTO> boardList(SearchDTO searchDTO){
+		return boardDAO.boardList(searchDTO);
 	}
 
 	public BoardDTO detail(int no) {
@@ -67,6 +67,10 @@ public class BoardService extends AbstractService{
 	public int totalPageCount() {
 		return boardDAO.totalRecordCount();
 	}
+	
+	public int totalPageCount(String search) {
+		return boardDAO.totalRecordCount(search);
+	}
 
 	public int deleteComment(int no, int cno) {
 		CommentDTO dto = new CommentDTO();
@@ -79,4 +83,9 @@ public class BoardService extends AbstractService{
 	public void likeUp(CommentDTO dto) {
 		boardDAO.likeUp(dto);
 	}
+
+	
+
+	
+
 }

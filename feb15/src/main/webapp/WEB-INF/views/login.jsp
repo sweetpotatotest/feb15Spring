@@ -36,6 +36,84 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script type="text/javascript">
+        $(function(){
+        	//cookie가져오기 = getCookie
+        	let userInputId = getCookie('userInputId');
+        	let setCookieYN = getCookie('setCookieYN');
+        	
+        	if(setCookieYN == 'Y'){
+		        $('#id').val(userInputId);
+    			$('#saveID').prop("checked", true);    		
+        	}
+        	
+        	//alert("구동하려면 제이쿼리가 필요합니다");
+        	//아이디칸, pw칸 검사
+        	$('.check').click(function(){
+        		let id = $('#id').val();
+        		let pw = $('#pw').val();
+        		if(id == '' || id.length < 3){
+        			Swal.fire("", "올바른 아이디를 입력하세요.","warning");
+        			//alert('아이디 문제');
+        			$('#id').focus();
+        			return false;
+        		}
+        		if(pw == ''){
+        			Swal.fire("", "올바른 비밀번호를 입력하세요.","warning");
+        			//alert('비밀번호 문제');
+        			$('#pw').focus();
+        			return false;
+        		}
+        		//쿠키에 id저장하기
+        		//if문으로 사용자가 아이디 저장 눌렀어?
+        		if($('#saveID').is(':checked')){
+        			//ID불러와서 저장하기
+        			setCookie('setCookieYN', 'Y', 60); // 아이디 저장을 클릭했는지 저장합니다.
+        			setCookie("userInputId", id, 60);  //쿠키 저장하는 함수
+        		} else {
+        			//사용자가 id 저장을 누르지 않음. = 저장 안 함.
+        			delCookie('userInputId');
+        			delCookie('setCookieYN');
+        		}
+        				
+        		$('#loginForm').submit();//form 실행
+        	});
+        });
+        
+        //쿠키 저장하는 함수 (쿠키이름, 값, 기한)
+        function setCookie(cookieName, value, exdays){
+        	//오늘 날짜 뽑기
+        	let date = new Date();
+        	date.setDate(date.getDate() + exdays);
+        	let value2 = escape(value) + "; expires=" + date.toGMTString();
+        	//escape() 아스키문자에 해당하지 않는 문자들은 모두 유니코드 형식으로 변환
+        	document.cookie = cookieName + "=" + value2;
+        }
+        
+        //쿠키값 가져오기(가져올 쿠키 이름)
+        function getCookie(cookieName){
+        	let x, y;
+        	let val = document.cookie.split(';');
+        	for(let i = 0; i < val.length; i++){
+        		x = val[i].substr(0, val[i].indexOf('='));//저장한 쿠키이름
+        		y = val[i].substr(val[i].indexOf('=') + 1);//쿠키 값
+        		x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+        		if(x == cookieName){
+        			return y;
+        		}
+        	}
+        }
+        
+        //삭제하기 (삭제할 쿠키 이름)
+        function delCookie(cookieName){
+        	//let date = new Date();
+        	//date.setDate(date.getDate() - 1);
+        	//document.cookie = cookieName + "=; expires="+date.toGMTString();
+        	document.cookie = cookieName + "=; max-age=0";//꼭!
+        }
+        
+        </script>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -49,7 +127,7 @@
 		                <div class="card shadow-lg border-0 rounded-lg mt-5">
 		                    <div class="card-body">
 		                        <h3 class="text-center font-weight-bold mb-4">로그인</h3>
-		                        <form action="./login" method="post">
+		                        <form action="./login" method="post" id="loginForm">
 		                            <div class="form-group mb-2">
 		                                <label for="id">아이디</label>
 		                                <input type="text" class="form-control mt-2" name="id" id="id" required>
@@ -58,9 +136,15 @@
 		                                <label for="pw">비밀번호</label>
 		                                <input type="password" class="form-control mt-1" name="pw" id="pw" required>
 		                            </div>
+		                            <div class="mb-3 row">
+		                            	<div class="col-sm-12 text-start">
+		                            		<input type="checkbox" class="saveID" id="saveID">
+		                            		<label for="saveID">아이디 저장</label>
+		                            	</div>
+		                            </div>
 		                            <div class="d-flex justify-content-between align-items-center">
 		                                <button type="reset" class="btn btn-secondary">초기화</button>
-		                                <button type="submit" class="btn btn-info">로그인</button>
+		                                <button type="button" class="btn btn-info check" >로그인</button>
 			                        <a href="./join" class="col-2 btn btn-secondary" style="font-size: smaller;">회원가입</a>
 		                            </div>
 		                        </form>

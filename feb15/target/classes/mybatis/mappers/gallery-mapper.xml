@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gallery">
+	
+	<insert id="galleryInsert" parameterType="galleryDTO">
+		INSERT INTO gallery (gtitle, gcontent, gfile, mno)
+		VALUES (#{gtitle}, #{gcontent}, #{gfile}, (SELECT mno FROM member WHERE mid=#{mid}))
+	</insert>
+	
+	<select id="galleryList" resultType="galleryDTO">
+		SELECT gno, gtitle, gfile, 
+		if( date_format(now(), '%Y-%m-%d') = date_format(gdate, '%Y-%m-%d'),
+		date_format(gdate, '%h:%i'),
+		date_format(gdate, '%Y-%m-%d')
+		) as gdate , glike  
+		FROM gallery
+		WHERE gdel=1
+	</select>
+	
+	<select id="galleryDetail" resultType="galleryDTO" parameterType="String">
+		SELECT g.gno, g.glike, g.gtitle, g.gcontent, g.gfile,  
+		date_format(g.gdate, '%Y년 %m월 %d일 %h시 %i분 %s초')as gdate, 
+		m.mname, m.mid
+		FROM gallery g JOIN member m on g.mno=m.mno  
+		where g.gno=#{no}
+	</select>
+</mapper>

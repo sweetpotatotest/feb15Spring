@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="login">
+	
+	<select id="login" parameterType="loginDTO" resultType="loginDTO">
+	<![CDATA[
+		SELECT COUNT(*) as count, mname, mcount, AES_DECRYPT(UNHEX(mpw),'Daiso') as pw  
+		FROM member
+		WHERE mid=#{id} AND mgrade > 4
+	]]>
+	</select>
+	
+	<update id="mcountUp" parameterType="loginDTO">
+		UPDATE member SET mcount=mcount + 1 WHERE mid=#{id}
+	</update>
+	
+	<update id="mcountReset" parameterType="loginDTO">
+		UPDATE member SET mcount=1 WHERE mid=#{id}
+	</update>
+	
+	<select id="getEmail" parameterType="String" resultType="String">
+		SELECT memail FROM member WHERE mid=#{id}
+	</select>
+	
+	<update id="setKey" parameterType="memberDTO">
+		UPDATE member SET mkey=#{mkey} WHERE mid=#{mid}
+	</update>
+	
+	<insert id="join" parameterType="memberDTO">
+		INSERT INTO member (mid, mpw, mname, memail)
+		VALUES (#{mid}, HEX(AES_ENCRYPT(#{mpw}, 'Daiso')), #{mname}, #{memail})
+	</insert>
+	
+</mapper>

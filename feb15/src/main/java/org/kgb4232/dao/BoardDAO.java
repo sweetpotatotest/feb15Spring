@@ -1,18 +1,18 @@
 package org.kgb4232.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.kgb4232.dto.BoardDTO;
 import org.kgb4232.dto.CommentDTO;
+import org.kgb4232.dto.SearchDTO;
 import org.kgb4232.dto.WriteDTO;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class BoardDAO extends AbstractDAO{
 
-	public List<Map<String, Object>> boardList(int pageNo) {
-		return sqlSession.selectList("board.boardList", pageNo);
+	public List<BoardDTO> boardList(SearchDTO searchDTO) {
+		return sqlSession.selectList("board.boardList", searchDTO);
 	}
 
 	public BoardDTO detail(int no) {
@@ -36,7 +36,10 @@ public class BoardDAO extends AbstractDAO{
 	}
 
 	public int totalRecordCount() {
-		return sqlSession.selectOne("board.totalRecordCount");
+		return sqlSession.selectOne("board.totalRecordCount2");
+	}
+	public int totalRecordCount(String search) {
+		return sqlSession.selectOne("board.totalRecordCount",search);
 	}
 
 	public int deleteComment(CommentDTO dto) {
@@ -51,6 +54,8 @@ public class BoardDAO extends AbstractDAO{
 	public void likeUp(CommentDTO dto) {
 		sqlSession.update("board.likeUp", dto);
 	}
+
+	
 
 	/*
 	 * public int alreadyRead(BoardDTO dto) { return

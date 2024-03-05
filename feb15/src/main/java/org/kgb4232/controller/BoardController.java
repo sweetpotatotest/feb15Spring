@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.kgb4232.dto.BoardDTO;
 import org.kgb4232.dto.CommentDTO;
+import org.kgb4232.dto.SearchDTO;
 import org.kgb4232.dto.WriteDTO;
 import org.kgb4232.service.BoardService;
 import org.kgb4232.util.Util;
@@ -33,7 +34,11 @@ public class BoardController {
 	
 	//페이징 추가하기 24-02-20 psd
 	@GetMapping("/board")
-	public String board(@RequestParam(value = "pageNo", required = false) String no, Model model) {
+	public String board(@RequestParam(value = "pageNo", required = false) String no, 
+						@RequestParam(value = "search", required = false) String search,
+						Model model) {
+		//System.err.println(search);
+		
 		//pageNo가 오지 않는다면
 		int currentPageNo = 1;
 		if (util.str2Int(no) > 0) {
@@ -41,8 +46,8 @@ public class BoardController {
 		}
 		
 		//전체 글 수 totalPageCount
-		int totalPageCount = boardService.totalPageCount();
-		System.err.println(totalPageCount);
+		int totalPageCount = boardService.totalPageCount(search);
+		//System.err.println(totalPageCount);
 		//pagination
 		PaginationInfo paginationInfo = new PaginationInfo();
 		paginationInfo.setCurrentPageNo(currentPageNo);// 현재 페이지 번호
@@ -50,9 +55,16 @@ public class BoardController {
 		paginationInfo.setPageSize(10); //페이징 리스트의 사이즈
 		paginationInfo.setTotalRecordCount(totalPageCount); //전체 게시물 건 수
 		
-		model.addAttribute("list", boardService.boardList(paginationInfo.getFirstRecordIndex()));
+		SearchDTO searchDTO = new SearchDTO();
+		searchDTO.setPageNo(paginationInfo.getFirstRecordIndex());
+		searchDTO.setSearch(search);
+		
+		List<BoardDTO> list = boardService.boardList(searchDTO);
+		model.addAttribute("list", list);
 		//페이징 관련 정보가 있는 PaginationInfo 객체를 모델에 반드시 넣어준다.
 		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("pageNo", currentPageNo);
+		model.addAttribute("search", search);
 		return "board";
 	}
 	
